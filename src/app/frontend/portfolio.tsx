@@ -1,14 +1,14 @@
-
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-// Interfaces
+// Interfaces adaptées au backend
 interface Project {
+  id: number;
   title: string;
-  categories: string[];
-  tags: string[];
+  categories: { id: number; name: string }[];
+  tags: { id: number; name: string }[];
   description: string;
   link: string;
 }
@@ -26,7 +26,7 @@ interface SkillBarProps {
   percentage: number;
 }
 
-// Custom Hooks
+// Custom Hook pour effet terminal
 const useTerminalAnimation = (text: string, delay: number = 80) => {
   const [displayText, setDisplayText] = useState('');
 
@@ -47,7 +47,7 @@ const useTerminalAnimation = (text: string, delay: number = 80) => {
   return displayText;
 };
 
-// Components
+// Barres de compétence
 const SkillBar: React.FC<SkillBarProps> = ({ title, percentage }) => {
   return (
     <div className="skill-item">
@@ -59,54 +59,37 @@ const SkillBar: React.FC<SkillBarProps> = ({ title, percentage }) => {
   );
 };
 
-// Main Portfolio Component
+// Composant principal
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+  const [projects, setProjects] = useState<Project[]>([]); // <-- State dynamique
   const { t } = useLanguage();
 
-  // Data
-  const projects: Project[] = [
-    {
-      title: 'Minishell',
-      categories: ['c'],
-      tags: ['C', 'Bash'],
-      description: 'Minishell is a very complete project made with Peu77\'s (who made a very good job) who mostly work in the parsing part, i mostly work in the execution part. Reproducing bash behavior including : pipe / and / or / parenthesis / redirection',
-      link: 'https://github.com/Peu77/minishell'
-    },
-    {
-      title: 'Inception',
-      categories: ['dorker'],
-      tags: ['Dorker', 'Virtual Machine', 'bash'],
-      description: 'Inception project is a docker-compose project that will deploy and connect 3 docker container containing : Nginx / Wordpress / Mariadb, deploying on a reverse proxy a wordpress website connected to a database',
-      link: 'https://github.com/Flotapponnier/Inception-42'
-    },
-    {
-      title: 'Cub3d',
-      categories: ['c'],
-      tags: ['C', 'Mlx', 'Raycasting'],
-      description: 'made with ilindaniel Cub3d is a graphic game made with the MLX42 library that copying the famous first 3d game with Raycasting Wolfenstein made by John Carmack. I mostly focus on the DDA and Brensham\'s Line algorithm, where my partner focus on texture and parsing',
-      link: 'https://github.com/Flotapponnier/Cub3d'
-    }
-  ];
+  // Récupérer projets depuis l'API au chargement
+  useEffect(() => {
+    fetch('/api/projects')
+      .then((res) => res.json())
+      .then((data) => setProjects(data))
+      .catch(() => setProjects([])); // fallback
+  }, []);
 
-  const languages: LanguageSkill[] = [
-    { name: 'French', flag: '🇫🇷', level: 'Native', proficiency: 100, proficiencyClass: 'proficiency-native' },
-    { name: 'English', flag: '🇬🇧', level: 'C2', proficiency: 95, proficiencyClass: 'proficiency-c2' },
-    { name: 'Italian', flag: '🇮🇹', level: 'B1', proficiency: 60, proficiencyClass: 'proficiency-b1' },
-    { name: 'Russian', flag: '🇷🇺', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
-    { name: 'German', flag: '🇩🇪', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
-    { name: 'Chinese', flag: '🇨🇳', level: 'A1', proficiency: 20, proficiencyClass: 'proficiency-a1' }
-  ];
+  // Filtrer les projets selon le filtre actif
+  const getFilteredProjects = useCallback(() => {
+    if (activeFilter === 'all') return projects;
+    return projects.filter((project) =>
+      project.categories.some((cat) => cat.name === activeFilter)
+    );
+  }, [activeFilter, projects]);
 
-  const additionalSkills = ['Git', 'Linux/Unix', 'Algorithms', 'Data Structures', 'PyTorch', 'Embedded Systems', 'Dorker', 'Vim/Neovim'];
-
+  // Gestion filtre
   const handleFilterClick = useCallback((filter: string) => {
     setActiveFilter(filter);
   }, []);
 
+  // Gestion flip cartes langues
   const handleLanguageCardClick = useCallback((language: string) => {
-    setFlippedCards(prev => {
+    setFlippedCards((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(language)) {
         newSet.delete(language);
@@ -122,15 +105,20 @@ export default function Portfolio() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Utility Functions
-  const getFilteredProjects = useCallback(() => {
-    return projects.filter(project => {
-      if (activeFilter === 'all') return true;
-      return project.categories.includes(activeFilter);
-    });
-  }, [activeFilter, projects]);
+  // Langues et autres données statiques
+  const languages: LanguageSkill[] = [
+    { name: 'French', flag: '🇫🇷', level: 'Native', proficiency: 100, proficiencyClass: 'proficiency-native' },
+    { name: 'English', flag: '🇬🇧', level: 'C2', proficiency: 95, proficiencyClass: 'proficiency-c2' },
+    { name: 'Italian', flag: '🇮🇹', level: 'B1', proficiency: 60, proficiencyClass: 'proficiency-b1' },
+    { name: 'Russian', flag: '🇷🇺', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
+    { name: 'German', flag: '🇩🇪', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
+    { name: 'Chinese', flag: '🇨🇳', level: 'A1', proficiency: 20, proficiencyClass: 'proficiency-a1' }
+  ];
 
-  // Section Components
+  const additionalSkills = ['Git', 'Linux/Unix', 'Algorithms', 'Data Structures', 'PyTorch', 'Embedded Systems', 'Dorker', 'Vim/Neovim'];
+
+  // Sections
+
   const AboutSection = () => {
     const welcomeText = useTerminalAnimation(t('about.welcome'));
 
@@ -153,7 +141,7 @@ export default function Portfolio() {
 
     const FilterControls = () => (
       <div className="filter-controls">
-        {['all', 'c', 'cpp', 'genai', 'dorker'].map(filter => (
+        {['all', 'c', 'cpp', 'genai', 'dorker'].map((filter) => (
           <button
             key={filter}
             className={`button ${activeFilter === filter ? 'active' : ''}`}
@@ -169,8 +157,10 @@ export default function Portfolio() {
       <div className="project-card">
         <h3>{project.title}</h3>
         <div className="tags">
-          {project.tags.map((tag, tagIndex) => (
-            <span key={tagIndex} className="tag">{tag}</span>
+          {project.tags.map((tag) => (
+            <span key={tag.id} className="tag">
+              {tag.name}
+            </span>
           ))}
         </div>
         <p>{project.description}</p>
@@ -185,8 +175,8 @@ export default function Portfolio() {
         <h2>{t('projects.title')}</h2>
         <FilterControls />
         <div className="project-grid">
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </section>
@@ -218,23 +208,21 @@ export default function Portfolio() {
     );
   };
 
-  const FormationSection = () => {
-    return (
-      <section id="Formation">
-        <h2>{t('formation.title')}</h2>
-        <div className="project-card">
-          <h3>{t('formation.school')}</h3>
-          <p className="terminal-effect">{t('formation.status')}</p>
-          <p>{t('formation.description')}</p>
-          <p>
-            <a href="https://www.42heilbronn.de/de/" target="_blank" rel="noopener noreferrer">
-              link
-            </a>
-          </p>
-        </div>
-      </section>
-    );
-  };
+  const FormationSection = () => (
+    <section id="Formation">
+      <h2>{t('formation.title')}</h2>
+      <div className="project-card">
+        <h3>{t('formation.school')}</h3>
+        <p className="terminal-effect">{t('formation.status')}</p>
+        <p>{t('formation.description')}</p>
+        <p>
+          <a href="https://www.42heilbronn.de/de/" target="_blank" rel="noopener noreferrer">
+            link
+          </a>
+        </p>
+      </div>
+    </section>
+  );
 
   const LanguagesSection = () => {
     const instructionText = useTerminalAnimation(t('languages.instruction'));
@@ -269,8 +257,8 @@ export default function Portfolio() {
         <h2>{t('languages.title')}</h2>
         <p className="terminal-effect">{instructionText}</p>
         <div className="language-grid">
-          {languages.map((language, index) => (
-            <LanguageCard key={index} language={language} />
+          {languages.map((language) => (
+            <LanguageCard key={language.name} language={language} />
           ))}
         </div>
       </section>
@@ -305,13 +293,13 @@ export default function Portfolio() {
       <section id="contact">
         <h2>{t('contact.title')}</h2>
         <div className="contact-grid">
-          {contactItems.map((item, index) => (
-            <div key={index} className="contact-item">
+          {contactItems.map((item) => (
+            <div key={item.title} className="contact-item">
               <h3>{item.title}</h3>
               <a
                 href={item.link}
-                target={item.link.startsWith('mailto:') ? undefined : "_blank"}
-                rel={item.link.startsWith('mailto:') ? undefined : "noopener noreferrer"}
+                target={item.link.startsWith('mailto:') ? undefined : '_blank'}
+                rel={item.link.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
               >
                 {item.text}
               </a>
@@ -322,7 +310,7 @@ export default function Portfolio() {
     );
   };
 
-  // Main Render
+  // Render principal
   return (
     <div className="portfolio-container">
       <AboutSection />
