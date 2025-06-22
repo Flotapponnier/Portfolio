@@ -315,3 +315,125 @@ section {
     margin-bottom: 0.5rem;
   }
 }
+
+header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: flex-start;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-picture {
+  flex-shrink: 0;
+}
+
+.profile-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: var(--border);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.profile-img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.title-section {
+  flex: 1;
+}
+
+.title-section h1 {
+  margin-bottom: 0.5rem;
+}
+
+.language-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.language-label {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.language-select {
+  background-color: var(--main-bg);
+  color: var(--text-color);
+  border: var(--border);
+  padding: 0.5rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 140px;
+}
+
+.language-select:hover {
+  background-color: var(--text-color);
+  color: var(--main-bg);
+}
+
+.language-select:focus {
+  outline: none;
+  background-color: var(--text-color);
+  color: var(--main-bg);
+}
+
+.language-select option {
+  background-color: var(--main-bg);
+  color: var(--text-color);
+  padding: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .language-selector {
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .profile-img {
+    width: 60px;
+    height: 60px;
+  }
+}
