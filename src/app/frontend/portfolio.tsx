@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Project {
   title: string;
@@ -11,108 +10,79 @@ interface Project {
   link: string;
 }
 
-interface Language {
+interface LanguageSkill {
   name: string;
   flag: string;
   level: string;
-  percentage: number;
+  proficiency: number;
+  proficiencyClass: string;
 }
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
-  const [welcomeText, setWelcomeText] = useState('');
-  const [languageText, setLanguageText] = useState('');
-  const [mounted, setMounted] = useState(false);
-
-  const welcomeMessage = "WELCOME TO MY DIGITAL REALM";
-  const languageMessage = "CLICK FLAGS TO REVEAL SKILL LEVEL";
+  const [terminalTexts, setTerminalTexts] = useState<{ [key: string]: string }>({});
 
   const projects: Project[] = [
     {
-      title: "MINISHELL",
-      categories: ["c"],
-      tags: ["C", "BASH", "UNIX"],
-      description: "Advanced shell implementation with full bash compatibility. Features include pipes, redirections, environment variables, and built-in commands. Collaborative project focusing on system programming and process management.",
-      link: "https://github.com/Peu77/minishell"
+      title: 'Minishell',
+      categories: ['c'],
+      tags: ['C', 'Bash'],
+      description: 'Minishell is a very complete project made with Peu77\'s (who made a very good job) who mostly work in the parsing part, i mostly work in the execution part. Reproducing bash behavior including : pipe / and / or / parenthesis / redirection',
+      link: 'https://github.com/Peu77/minishell'
     },
     {
-      title: "INCEPTION",
-      categories: ["docker"],
-      tags: ["DOCKER", "NGINX", "WORDPRESS"],
-      description: "Multi-container application deployment using Docker Compose. Orchestrates Nginx reverse proxy, WordPress CMS, and MariaDB database in isolated containers with custom networking and volume management.",
-      link: "https://github.com/Flotapponnier/Inception-42"
+      title: 'Inception',
+      categories: ['dorker'],
+      tags: ['Dorker', 'Virtual Machine', 'bash'],
+      description: 'Inception project is a docker-compose project that will deploy and connect 3 docker container containing : Nginx / Wordpress / Mariadb, deploying on a reverse proxy a wordpress website connected to a database',
+      link: 'https://github.com/Flotapponnier/Inception-42'
     },
     {
-      title: "CUB3D",
-      categories: ["c"],
-      tags: ["C", "RAYCASTING", "MLX"],
-      description: "3D game engine inspired by Wolfenstein 3D. Implements raycasting algorithms, DDA line drawing, and real-time rendering using MLX42 graphics library. Features texture mapping and collision detection.",
-      link: "https://github.com/Flotapponnier/Cub3d"
+      title: 'Cub3d',
+      categories: ['c'],
+      tags: ['C', 'Mlx', 'Raycasting'],
+      description: 'made with ilindaniel Cub3d is a graphic game made with the MLX42 library that copying the famous first 3d game with Raycasting Wolfenstein made by John Carmack. I mostly focus on the DDA and Brensham\'s Line algorithm, where my partner focus on texture and parsing',
+      link: 'https://github.com/Flotapponnier/Cub3d'
     }
   ];
 
-  const languages: Language[] = [
-    { name: "FRENCH", flag: "🇫🇷", level: "NATIVE", percentage: 100 },
-    { name: "ENGLISH", flag: "🇬🇧", level: "C2", percentage: 95 },
-    { name: "ITALIAN", flag: "🇮🇹", level: "B1", percentage: 60 },
-    { name: "RUSSIAN", flag: "🇷🇺", level: "A2", percentage: 40 },
-    { name: "GERMAN", flag: "🇩🇪", level: "A2", percentage: 40 },
-    { name: "CHINESE", flag: "🇨🇳", level: "A1", percentage: 20 }
+  const languages: LanguageSkill[] = [
+    { name: 'French', flag: '🇫🇷', level: 'Native', proficiency: 100, proficiencyClass: 'proficiency-native' },
+    { name: 'English', flag: '🇬🇧', level: 'C2', proficiency: 95, proficiencyClass: 'proficiency-c2' },
+    { name: 'Italian', flag: '🇮🇹', level: 'B1', proficiency: 60, proficiencyClass: 'proficiency-b1' },
+    { name: 'Russian', flag: '🇷🇺', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
+    { name: 'German', flag: '🇩🇪', level: 'A2', proficiency: 40, proficiencyClass: 'proficiency-a2' },
+    { name: 'Chinese', flag: '🇨🇳', level: 'A1', proficiency: 20, proficiencyClass: 'proficiency-a1' }
   ];
 
-  const skills = [
-    { name: "C PROGRAMMING", level: 95 },
-    { name: "C++ DEVELOPMENT", level: 90 },
-    { name: "GENERATIVE AI", level: 75 }
-  ];
-
-  const additionalSkills = [
-    "GIT", "LINUX/UNIX", "ALGORITHMS", "DATA STRUCTURES",
-    "PYTORCH", "EMBEDDED SYSTEMS", "DOCKER", "VIM/NEOVIM"
-  ];
-
-  const filterCategories = [
-    { id: 'all', label: 'ALL' },
-    { id: 'c', label: 'C/C++' },
-    { id: 'docker', label: 'DOCKER' },
-    { id: 'genai', label: 'GENAI' }
-  ];
+  const terminalTextsToAnimate = {
+    'intro-subheading': 'Welcome to my digital realm',
+    'languages-instruction': 'Click on flags to reveal proficiency level'
+  };
 
   useEffect(() => {
-    setMounted(true);
-
-    // Typewriter effects
-    let welcomeIndex = 0;
-    const welcomeInterval = setInterval(() => {
-      if (welcomeIndex < welcomeMessage.length) {
-        setWelcomeText(welcomeMessage.substring(0, welcomeIndex + 1));
-        welcomeIndex++;
-      } else {
-        clearInterval(welcomeInterval);
-      }
-    }, 60);
-
-    setTimeout(() => {
-      let langIndex = 0;
-      const langInterval = setInterval(() => {
-        if (langIndex < languageMessage.length) {
-          setLanguageText(languageMessage.substring(0, langIndex + 1));
-          langIndex++;
+    Object.entries(terminalTextsToAnimate).forEach(([key, text]) => {
+      let i = 0;
+      const typeInterval = setInterval(() => {
+        if (i < text.length) {
+          setTerminalTexts(prev => ({
+            ...prev,
+            [key]: text.substring(0, i + 1)
+          }));
+          i++;
         } else {
-          clearInterval(langInterval);
+          clearInterval(typeInterval);
         }
-      }, 50);
-    }, 2000);
-
-    return () => clearInterval(welcomeInterval);
+      }, 80);
+    });
   }, []);
 
-  const filteredProjects = projects.filter(project =>
-    activeFilter === 'all' || project.categories.includes(activeFilter)
-  );
+  const handleFilterClick = (filter: string) => {
+    setActiveFilter(filter);
+  };
 
-  const toggleLanguageCard = (language: string) => {
+  const handleLanguageCardClick = (language: string) => {
     setFlippedCards(prev => {
       const newSet = new Set(prev);
       if (newSet.has(language)) {
@@ -124,285 +94,145 @@ export default function Portfolio() {
     });
   };
 
-  if (!mounted) return null;
+  const filteredProjects = projects.filter(project => {
+    if (activeFilter === 'all') return true;
+    return project.categories.includes(activeFilter);
+  });
 
   return (
-    <div className="bg-black text-apple-green font-mono space-y-12 relative">
-      {/* Background grid pattern */}
-      <div className="fixed inset-0 opacity-5 pointer-events-none">
-        <div className="absolute inset-0 bg-grid-pattern" />
-      </div>
-
-      {/* HELLO WORLD Section */}
-      <section className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <span className="text-apple-green/60 text-sm">ABOUT.EXE</span>
-        </div>
-        <div className="terminal-content">
-          <h2 className="text-6xl font-bold mb-6 text-lime-400 tracking-wider">
-            HELLO WORLD
-          </h2>
-          <p className="text-2xl mb-8 text-apple-green/80">
-            <span className="text-lime-400 animate-blink-fast">&gt;</span>
-            <span className="ml-2">{welcomeText}</span>
-            <span className="animate-blink-cursor">█</span>
-          </p>
-          <div className="space-y-6 text-lg leading-relaxed">
-            <p>FLORENT TAPPONNIER - FRENCH DEVELOPER</p>
-            <p>INTENSIVE SKILL DEVELOPMENT 2024-2025</p>
-            <p>42 SCHOOL GRADUATE • C/C++ SPECIALIST</p>
-            <p>CURRENT FOCUS: GENAI • ML/DL • NLP • LLM • AI AGENTS</p>
-          </div>
-          <button className="retro-button mt-8">
-            INITIALIZE_CONTACT.EXE
-          </button>
-        </div>
+    <div className="portfolio-container">
+      <section id="about" className="intro">
+        <h2 className="intro__heading">HELLO WORLD</h2>
+        <p className="intro__subheading terminal-effect">{terminalTexts['intro-subheading'] || ''}</p>
+        <p>My name is Florent Tapponnier, i'm from France and have been intensively to gain value and skill during the year 2024 - 2025</p>
+        <p>With the help of the 42 school i become proificient in C/C++ developemment and now i have a growing interest in Generative AI.</p>
+        <p>Currently, I'm focused on applying these skills to the emerging field of GenAI development, with taking an interest in ML/DL/NLP/LLM/AI Agent</p>
+        <a href="#contact" className="button" onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        }}>Get in touch</a>
       </section>
 
-      {/* Projects Section */}
-      <section className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <span className="text-apple-green/60 text-sm">PROJECTS.EXE</span>
-        </div>
-        <div className="terminal-content">
-          <h2 className="text-4xl font-bold mb-8 text-lime-400 tracking-wider">
-            PROJECT_ARCHIVE
-          </h2>
-
-          {/* Filter Controls */}
-          <div className="flex flex-wrap gap-3 mb-8">
-            {filterCategories.map(category => (
-              <button
-                key={category.id}
-                onClick={() => setActiveFilter(category.id)}
-                className={`px-6 py-3 font-bold tracking-wide transition-all duration-200 ${activeFilter === category.id
-                    ? 'bg-apple-green text-black border-2 border-apple-green'
-                    : 'border-2 border-apple-green text-apple-green hover:bg-apple-green/10'
-                  }`}
-              >
-                [{category.label}]
-              </button>
-            ))}
-          </div>
-
-          {/* Project Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredProjects.map((project, index) => (
-              <div key={index} className="project-card group">
-                <div className="project-header">
-                  <h3 className="text-xl font-bold text-lime-400 tracking-wide">
-                    {project.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="text-apple-green/80 text-sm leading-relaxed mb-6">
-                  {project.description}
-                </p>
-
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="retro-button-small w-full text-center"
-                >
-                  ACCESS_PROJECT
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <span className="text-apple-green/60 text-sm">SKILLS.EXE</span>
-        </div>
-        <div className="terminal-content">
-          <h2 className="text-4xl font-bold mb-8 text-lime-400 tracking-wider">
-            SKILL_MATRIX
-          </h2>
-
-          <div className="space-y-6 mb-8">
-            {skills.map((skill, index) => (
-              <div key={index} className="skill-item">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-bold">{skill.name}</h3>
-                  <span className="text-lime-400 font-bold">{skill.level}%</span>
-                </div>
-                <div className="skill-bar">
-                  <div
-                    className="skill-progress"
-                    style={{ width: `${skill.level}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="text-2xl font-bold mb-6 text-lime-400">ADDITIONAL_MODULES</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {additionalSkills.map((skill, index) => (
-              <div key={index} className="tag-large">
-                {skill}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Formation Section */}
-      <section className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <span className="text-apple-green/60 text-sm">EDUCATION.EXE</span>
-        </div>
-        <div className="terminal-content">
-          <h2 className="text-4xl font-bold mb-8 text-lime-400 tracking-wider">
-            TRAINING_LOG
-          </h2>
-          <div className="education-card">
-            <h3 className="text-2xl font-bold text-lime-400 mb-2">42 HEILBRONN</h3>
-            <p className="text-apple-green/80 mb-4 text-lg">
-              <span className="text-lime-400">&gt;</span> ALUMNI STATUS
-            </p>
-            <p className="text-apple-green/80 leading-relaxed mb-4">
-              PEER-TO-PEER LEARNING ECOSYSTEM<br />
-              SYSTEMS PROGRAMMING • ALGORITHMS • UNIX<br />
-              PROJECT-BASED CURRICULUM • NO TEACHERS
-            </p>
-            <a
-              href="https://www.42heilbronn.de/de/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="retro-button-small"
+      <section id="projects">
+        <h2>Projects</h2>
+        <div className="filter-controls">
+          {['all', 'c', 'cpp', 'genai', 'dorker'].map(filter => (
+            <button
+              key={filter}
+              className={`button ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => handleFilterClick(filter)}
             >
-              VIEW_INSTITUTION
-            </a>
-          </div>
+              {filter.charAt(0).toUpperCase() + filter.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        <div className="project-grid">
+          {filteredProjects.map((project, index) => (
+            <div key={index} className="project-card">
+              <h3>{project.title}</h3>
+              <div className="tags">
+                {project.tags.map((tag, tagIndex) => (
+                  <span key={tagIndex} className="tag">{tag}</span>
+                ))}
+              </div>
+              <p>{project.description}</p>
+              <a href={project.link} className="button" target="_blank" rel="noopener noreferrer">
+                View Project
+              </a>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Language Skills Section */}
-      <section className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+      <section id="skills">
+        <h2>Technical Skills</h2>
+
+        <div className="skill-item">
+          <h3>C Programming</h3>
+          <div className="skill-bar">
+            <span className="skill-progress" style={{ width: '95%' }}></span>
           </div>
-          <span className="text-apple-green/60 text-sm">LANGUAGES.EXE</span>
         </div>
-        <div className="terminal-content">
-          <h2 className="text-4xl font-bold mb-6 text-lime-400 tracking-wider">
-            LANGUAGE_PROTOCOLS
-          </h2>
-          <p className="text-xl mb-8 text-apple-green/80">
-            <span className="text-lime-400 animate-blink-fast">&gt;</span>
-            <span className="ml-2">{languageText}</span>
-            <span className="animate-blink-cursor">█</span>
-          </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {languages.map((language, index) => (
-              <div
-                key={index}
-                onClick={() => toggleLanguageCard(language.name)}
-                className="language-card"
-              >
-                <div className={`language-inner ${flippedCards.has(language.name) ? 'flipped' : ''
-                  }`}>
-                  {/* Front */}
-                  <div className="language-front">
-                    <div className="text-6xl mb-3 filter drop-shadow-glow">
-                      {language.flag}
-                    </div>
-                    <h3 className="text-lg font-bold tracking-wide">{language.name}</h3>
-                  </div>
+        <div className="skill-item">
+          <h3>C++ Programming</h3>
+          <div className="skill-bar">
+            <span className="skill-progress" style={{ width: '90%' }}></span>
+          </div>
+        </div>
 
-                  {/* Back */}
-                  <div className="language-back">
-                    <h3 className="text-lg font-bold mb-4 tracking-wide">{language.name}</h3>
-                    <div className="w-full">
-                      <div className="text-center mb-3">
-                        <span className="text-lime-400 font-bold text-xl">{language.level}</span>
-                      </div>
-                      <div className="skill-bar">
-                        <div
-                          className="skill-progress"
-                          style={{ width: `${language.percentage}%` }}
-                        />
-                      </div>
-                    </div>
+        <div className="skill-item">
+          <h3>Generative AI</h3>
+          <div className="skill-bar">
+            <span className="skill-progress" style={{ width: '70%' }}></span>
+          </div>
+        </div>
+
+        <h3>Additional Skills</h3>
+        <div className="skills">
+          {['Git', 'Linux/Unix', 'Algorithms', 'Data Structures', 'PyTorch', 'Embedded Systems', 'Dorker', 'Vim/Neovim'].map((skill, index) => (
+            <span key={index} className="tag">{skill}</span>
+          ))}
+        </div>
+      </section>
+
+      <section id="Formation">
+        <h2>Formation</h2>
+        <div className="project-card">
+          <h3>Heilbronn - 42 school</h3>
+          <p className="terminal-effect">Alumni</p>
+          <p>Joining the 42 school, giving me access to the network of programming, increasing and made me diving in the world of embedded systems and computer science</p>
+          <p><a href="https://www.42heilbronn.de/de/" target="_blank" rel="noopener noreferrer">link</a></p>
+        </div>
+      </section>
+
+      <section id="languages">
+        <h2>Language Skills</h2>
+        <p className="terminal-effect">{terminalTexts['languages-instruction'] || ''}</p>
+        <div className="language-grid">
+          {languages.map((language, index) => (
+            <div
+              key={index}
+              className={`language-card ${flippedCards.has(language.name) ? 'flipped' : ''}`}
+              onClick={() => handleLanguageCardClick(language.name)}
+            >
+              <div className="language-front">
+                <div className="flag">{language.flag}</div>
+                <h3>{language.name}</h3>
+              </div>
+              <div className="language-back">
+                <h3>{language.name}</h3>
+                <div className={`proficiency ${language.proficiencyClass}`}>
+                  <span className="level">{language.level}</span>
+                  <div className="level-bar">
+                    <span style={{ width: `${language.proficiency}%` }}></span>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="terminal-window">
-        <div className="terminal-header">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+      <section id="contact">
+        <h2>Contact</h2>
+        <div className="contact-grid">
+          <div className="contact-item">
+            <h3>Email</h3>
+            <a href="mailto:florent.tapponnier@gmail.com">Send mail</a>
           </div>
-          <span className="text-apple-green/60 text-sm">CONTACT.EXE</span>
-        </div>
-        <div className="terminal-content">
-          <h2 className="text-4xl font-bold mb-8 text-lime-400 tracking-wider">
-            COMMUNICATION_PORTS
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { title: "EMAIL", link: "mailto:florent.tapponnier@gmail.com", text: "SEND_MESSAGE" },
-              { title: "GITHUB", link: "https://github.com/Flotapponnier/", text: "@FLOTAPPONNIER" },
-              { title: "LINKEDIN", link: "https://www.linkedin.com/in/florent-tapponnier-26324a17a/", text: "CONNECT_PROFESSIONAL" },
-              { title: "TWITTER", link: "https://x.com/FlorentTppnr", text: "@FLORENTTPPNR" }
-            ].map((contact, index) => (
-              <div key={index} className="contact-card">
-                <h3 className="text-xl font-bold text-lime-400 mb-4 tracking-wide">
-                  {contact.title}
-                </h3>
-                <a
-                  href={contact.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="retro-button-small w-full text-center"
-                >
-                  {contact.text}
-                </a>
-              </div>
-            ))}
+          <div className="contact-item">
+            <h3>GitHub</h3>
+            <a href="https://github.com/Flotapponnier/" target="_blank" rel="noopener noreferrer">@Flotapponnier</a>
+          </div>
+          <div className="contact-item">
+            <h3>LinkedIn</h3>
+            <a href="https://www.linkedin.com/in/florent-tapponnier-26324a17a/" target="_blank" rel="noopener noreferrer">Florent Tapponnier</a>
+          </div>
+          <div className="contact-item">
+            <h3>Twitter</h3>
+            <a href="https://x.com/FlorentTppnr" target="_blank" rel="noopener noreferrer">@FlorentTppnr</a>
           </div>
         </div>
       </section>
