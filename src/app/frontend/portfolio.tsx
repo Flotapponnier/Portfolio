@@ -1,6 +1,8 @@
+
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 // Interfaces
 interface Project {
@@ -61,6 +63,7 @@ const SkillBar: React.FC<SkillBarProps> = ({ title, percentage }) => {
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+  const { t } = useLanguage();
 
   // Data
   const projects: Project[] = [
@@ -98,7 +101,6 @@ export default function Portfolio() {
 
   const additionalSkills = ['Git', 'Linux/Unix', 'Algorithms', 'Data Structures', 'PyTorch', 'Embedded Systems', 'Dorker', 'Vim/Neovim'];
 
-  // Event Handlers
   const handleFilterClick = useCallback((filter: string) => {
     setActiveFilter(filter);
   }, []);
@@ -130,17 +132,17 @@ export default function Portfolio() {
 
   // Section Components
   const AboutSection = () => {
-    const welcomeText = useTerminalAnimation('Welcome to my digital realm');
+    const welcomeText = useTerminalAnimation(t('about.welcome'));
 
     return (
       <section id="about" className="intro">
-        <h2 className="intro__heading">HELLO WORLD</h2>
+        <h2 className="intro__heading">{t('about.title')}</h2>
         <p className="intro__subheading terminal-effect">{welcomeText}</p>
-        <p>My name is Florent Tapponnier, i'm from France and have been intensively to gain value and skill during the year 2024 - 2025</p>
-        <p>With the help of the 42 school i become proificient in C/C++ developemment and now i have a growing interest in Generative AI.</p>
-        <p>Currently, I'm focused on applying these skills to the emerging field of GenAI development, with taking an interest in ML/DL/NLP/LLM/AI Agent</p>
+        <p>{t('about.intro1')}</p>
+        <p>{t('about.intro2')}</p>
+        <p>{t('about.intro3')}</p>
         <a href="#contact" className="button" onClick={scrollToContact}>
-          Get in touch
+          {t('about.contact')}
         </a>
       </section>
     );
@@ -157,7 +159,7 @@ export default function Portfolio() {
             className={`button ${activeFilter === filter ? 'active' : ''}`}
             onClick={() => handleFilterClick(filter)}
           >
-            {filter.charAt(0).toUpperCase() + filter.slice(1)}
+            {t(`projects.filter.${filter}`)}
           </button>
         ))}
       </div>
@@ -173,14 +175,14 @@ export default function Portfolio() {
         </div>
         <p>{project.description}</p>
         <a href={project.link} className="button" target="_blank" rel="noopener noreferrer">
-          View Project
+          {t('projects.view')}
         </a>
       </div>
     );
 
     return (
       <section id="projects">
-        <h2>Projects</h2>
+        <h2>{t('projects.title')}</h2>
         <FilterControls />
         <div className="project-grid">
           {filteredProjects.map((project, index) => (
@@ -193,20 +195,20 @@ export default function Portfolio() {
 
   const SkillsSection = () => {
     const skillsData = [
-      { title: 'C Programming', percentage: 95 },
-      { title: 'C++ Programming', percentage: 90 },
-      { title: 'Generative AI', percentage: 70 }
+      { title: t('skills.c'), percentage: 95 },
+      { title: t('skills.cpp'), percentage: 90 },
+      { title: t('skills.genai'), percentage: 70 }
     ];
 
     return (
       <section id="skills">
-        <h2>Technical Skills</h2>
+        <h2>{t('skills.title')}</h2>
 
         {skillsData.map((skill, index) => (
           <SkillBar key={index} title={skill.title} percentage={skill.percentage} />
         ))}
 
-        <h3>Additional Skills</h3>
+        <h3>{t('skills.additional')}</h3>
         <div className="skills">
           {additionalSkills.map((skill, index) => (
             <span key={index} className="tag">{skill}</span>
@@ -219,11 +221,11 @@ export default function Portfolio() {
   const FormationSection = () => {
     return (
       <section id="Formation">
-        <h2>Formation</h2>
+        <h2>{t('formation.title')}</h2>
         <div className="project-card">
-          <h3>Heilbronn - 42 school</h3>
-          <p className="terminal-effect">Alumni</p>
-          <p>Joining the 42 school, giving me access to the network of programming, increasing and made me diving in the world of embedded systems and computer science</p>
+          <h3>{t('formation.school')}</h3>
+          <p className="terminal-effect">{t('formation.status')}</p>
+          <p>{t('formation.description')}</p>
           <p>
             <a href="https://www.42heilbronn.de/de/" target="_blank" rel="noopener noreferrer">
               link
@@ -235,7 +237,7 @@ export default function Portfolio() {
   };
 
   const LanguagesSection = () => {
-    const instructionText = useTerminalAnimation('Click on flags to reveal proficiency level');
+    const instructionText = useTerminalAnimation(t('languages.instruction'));
 
     const LanguageCard = ({ language }: { language: LanguageSkill }) => {
       const isFlipped = flippedCards.has(language.name);
@@ -264,7 +266,7 @@ export default function Portfolio() {
 
     return (
       <section id="languages">
-        <h2>Language Skills</h2>
+        <h2>{t('languages.title')}</h2>
         <p className="terminal-effect">{instructionText}</p>
         <div className="language-grid">
           {languages.map((language, index) => (
@@ -280,7 +282,7 @@ export default function Portfolio() {
       {
         title: 'Email',
         link: 'mailto:florent.tapponnier@gmail.com',
-        text: 'Send mail'
+        text: t('contact.email')
       },
       {
         title: 'GitHub',
@@ -301,7 +303,7 @@ export default function Portfolio() {
 
     return (
       <section id="contact">
-        <h2>Contact</h2>
+        <h2>{t('contact.title')}</h2>
         <div className="contact-grid">
           {contactItems.map((item, index) => (
             <div key={index} className="contact-item">

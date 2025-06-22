@@ -1,4 +1,11 @@
+
+'use client';
+
+import { useLanguage } from '../context/LanguageContext';
+
 export default function BottomBar() {
+  const { t } = useLanguage();
+
   return (
     <div className="portfolio-container">
       <footer style={{
@@ -7,7 +14,7 @@ export default function BottomBar() {
         padding: '1rem',
         borderTop: 'var(--border)'
       }}>
-        <p>&copy; 2025 Florent Tapponnier</p>
+        <p>{t('footer.copyright')}</p>
       </footer>
     </div>
   );

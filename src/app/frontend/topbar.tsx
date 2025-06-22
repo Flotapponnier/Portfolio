@@ -48,7 +48,7 @@ export default function TopBar() {
             <div className="profile-section">
               <div className="profile-picture">
                 <img
-                  src="/profile.jpg"
+                  src="profile.jpeg"
                   alt="Florent Tapponnier"
                   className="profile-img"
                   onError={(e) => {
