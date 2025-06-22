@@ -70,8 +70,24 @@ export default function Portfolio() {
   useEffect(() => {
     fetch('/api/projects')
       .then((res) => res.json())
-      .then((data) => setProjects(data))
+      .then(data => {
+        console.log('Projects fetched:', data); // <-- Ajoute ce log
+        setProjects(data);
+      })
       .catch(() => setProjects([])); // fallback
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        console.log('Projects fetched:', data); // <-- Ajoute ce log
+        setProjects(data);
+      })
+      .catch(err => {
+        console.error('Error fetching projects:', err);
+        setProjects([]);
+      });
   }, []);
 
   // Filtrer les projets selon le filtre actif

@@ -18,14 +18,14 @@ model Project {
 
 model Category {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique       // <-- add this
   project   Project?  @relation(fields: [projectId], references: [id])
   projectId Int?
 }
 
 model Tag {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique       // <-- add this
   project   Project?  @relation(fields: [projectId], references: [id])
   projectId Int?
 }
