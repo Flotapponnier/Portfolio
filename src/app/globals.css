@@ -315,7 +315,7 @@ section {
     margin-bottom: 0.5rem;
   }
 }
-header-top {
+.header-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;

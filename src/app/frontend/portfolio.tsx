@@ -169,6 +169,7 @@ export default function Portfolio() {
       </div>
     );
 
+
     const ProjectCard = ({ project }: { project: Project }) => (
       <div className="project-card">
         <h3>{project.title}</h3>
