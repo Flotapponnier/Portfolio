@@ -11,6 +11,7 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
+
 // Translations object
 const translations = {
   en: {
