@@ -203,7 +203,7 @@ section {
   color: var(--accent);
 }
 
-/* Language Skills Section */
+/* ====== CORRECTED LANGUAGE CARDS ====== */
 .language-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -217,11 +217,25 @@ section {
   cursor: pointer;
 }
 
+.language-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.language-card.flipped .language-card-inner {
+  transform: rotateY(180deg);
+}
+
 .language-front,
 .language-back {
   position: absolute;
   width: 100%;
   height: 100%;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border: var(--border);
   display: flex;
@@ -229,23 +243,10 @@ section {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  transition: transform 0.6s;
-}
-
-.language-front {
-  transform: rotateY(0deg);
 }
 
 .language-back {
   transform: rotateY(180deg);
-}
-
-.language-card.flipped .language-front {
-  transform: rotateY(180deg);
-}
-
-.language-card.flipped .language-back {
-  transform: rotateY(0deg);
 }
 
 .flag {
@@ -298,23 +299,7 @@ section {
   color: #9900ff;
 }
 
-@media (max-width: 768px) {
-  .portfolio-container {
-    padding: 1rem;
-  }
-
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
-
-  nav ul {
-    flex-direction: column;
-  }
-
-  nav li {
-    margin-bottom: 0.5rem;
-  }
-}
+/* ====== HEADER STYLES ====== */
 .header-top {
   display: flex;
   justify-content: space-between;
@@ -407,8 +392,87 @@ section {
   padding: 0.5rem;
 }
 
-/* Responsive adjustments */
+/* ====== SECTION CONTROLS ====== */
+.section-wrapper {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.section-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.section-wrapper:hover .section-controls {
+  opacity: 1;
+}
+
+.section-control-btn {
+  background: var(--main-bg);
+  border: var(--border);
+  color: var(--text-color);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.section-control-btn:hover:not(.disabled) {
+  background-color: var(--text-color);
+  color: var(--main-bg);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.section-control-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #555;
+}
+
+.section-control-btn.disabled:hover {
+  background: var(--main-bg);
+  color: var(--text-color);
+  transform: none;
+  box-shadow: none;
+}
+
+.section-wrapper {
+  transition: all 0.3s ease;
+}
+
+/* ====== RESPONSIVE STYLES ====== */
 @media (max-width: 768px) {
+  .portfolio-container {
+    padding: 1rem;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav li {
+    margin-bottom: 0.5rem;
+  }
+
   .header-top {
     flex-direction: column;
     align-items: center;
@@ -435,4 +499,92 @@ section {
     width: 60px;
     height: 60px;
   }
+
+  .section-controls {
+    position: relative;
+    top: 0;
+    right: 0;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1rem;
+    opacity: 1;
+  }
+
+  .section-control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+}
+
+.admin-container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.admin-th {
+  text-align: left;
+  padding: 8px;
+  background-color: #f4f4f4;
+}
+
+.admin-td {
+  padding: 8px;
+  vertical-align: top;
+  border-bottom: 1px solid #ccc;
+}
+
+.admin-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.admin-button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #2980b9;
+  color: white;
+}
+
+.admin-button.delete {
+  background-color: #e74c3c;
+}
+
+.admin-button.save {
+  background-color: #27ae60;
+  font-weight: bold;
+}
+
+.admin-button.cancel {
+  background-color: #95a5a6;
+}
+
+.admin-input {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-form {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 6px;
 }

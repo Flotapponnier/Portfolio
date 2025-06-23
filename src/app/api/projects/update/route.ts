@@ -48,16 +48,29 @@ export default function AdminPage() {
 
   async function fetchProjects() {
     setLoading(true);
-    const res = await fetch('/api/projects');
-    const data = await res.json();
-    setProjects(data);
-    setLoading(false);
+    try {
+      const res = await fetch('/api/projects');
+      const data = await res.json();
+      setProjects(data);
+    } catch {
+      alert('Failed to fetch projects');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function deleteProject(id: number) {
     if (!confirm('Are you sure you want to delete this project?')) return;
-    const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-    if (res.ok) fetchProjects();
+    try {
+      const res = await fetch(`/api/projects/update?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchProjects();
+      } else {
+        alert('Failed to delete project');
+      }
+    } catch {
+      alert('Error deleting project');
+    }
   }
 
   async function saveProject() {
@@ -73,19 +86,23 @@ export default function AdminPage() {
     };
 
     const method = editId ? 'PUT' : 'POST';
-    const url = editId ? `/api/projects/${editId}` : '/api/projects';
+    const url = editId ? `/api/projects/update?id=${editId}` : '/api/projects';
 
-    const res = await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
 
-    if (res.ok) {
-      setNewProject({ title: '', description: '', link: '', categories: '', tags: '' });
-      setEditId(null);
-      fetchProjects();
-    } else {
+      if (res.ok) {
+        setNewProject({ title: '', description: '', link: '', categories: '', tags: '' });
+        setEditId(null);
+        fetchProjects();
+      } else {
+        alert('Error saving project');
+      }
+    } catch {
       alert('Error saving project');
     }
   }
@@ -106,10 +123,9 @@ export default function AdminPage() {
   }
 
   if (!isAuthenticated) {
-    return <p>Redirecting...</p>; // (shouldn't see this unless window.location.href fails)
+    return <p>Redirecting...</p>;
   }
 
-  // === The rest of your Admin UI remains the same ===
   return (
     <main className="admin-container">
       <h1>Admin - Manage Projects</h1>
@@ -155,11 +171,11 @@ export default function AdminPage() {
       <section className="admin-form">
         <h2>{editId ? 'Edit Project' : 'Add New Project'}</h2>
         <div className="form-group">
-          <input type="text" placeholder="Title" value={newProject.title} onChange={(e) => setNewProject({ ...newProject, title: e.target.value })} className="admin-input" />
-          <input type="text" placeholder="Description" value={newProject.description} onChange={(e) => setNewProject({ ...newProject, description: e.target.value })} className="admin-input" />
-          <input type="url" placeholder="Link" value={newProject.link} onChange={(e) => setNewProject({ ...newProject, link: e.target.value })} className="admin-input" />
-          <input type="text" placeholder="Categories (comma separated)" value={newProject.categories} onChange={(e) => setNewProject({ ...newProject, categories: e.target.value })} className="admin-input" />
-          <input type="text" placeholder="Tags (comma separated)" value={newProject.tags} onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })} className="admin-input" />
+          <input type="text" placeholder="Title" value={newProject.title} onChange={e => setNewProject({ ...newProject, title: e.target.value })} className="admin-input" />
+          <input type="text" placeholder="Description" value={newProject.description} onChange={e => setNewProject({ ...newProject, description: e.target.value })} className="admin-input" />
+          <input type="url" placeholder="Link" value={newProject.link} onChange={e => setNewProject({ ...newProject, link: e.target.value })} className="admin-input" />
+          <input type="text" placeholder="Categories (comma separated)" value={newProject.categories} onChange={e => setNewProject({ ...newProject, categories: e.target.value })} className="admin-input" />
+          <input type="text" placeholder="Tags (comma separated)" value={newProject.tags} onChange={e => setNewProject({ ...newProject, tags: e.target.value })} className="admin-input" />
           <button onClick={saveProject} className="admin-button save">
             {editId ? 'Save Changes' : 'Add Project'}
           </button>
