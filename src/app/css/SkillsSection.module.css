@@ -1,0 +1,23 @@
+/* ========================================
+   SKILLS SECTION COMPONENT STYLES
+   ======================================== */
+
+/* Skills Grid */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Skill Bars */
+.skill-bar {
+  width: 100%;
+  border: var(--border);
+  margin-bottom: 1rem;
+}
+
+.skill-progress {
+  background-color: var(--text-color);
+  height: 20px;
+  display: block;
+}

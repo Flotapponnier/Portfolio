@@ -1,6 +1,5 @@
 'use client';
-
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useLanguage, Language } from '../../context/LanguageContext';
 import { useTerminalAnimation } from './hooks';
 
@@ -12,7 +11,6 @@ const promptTemplates: Record<Language, string> = {
 - 42 School projects
 - Docker and containerization
   #session:${Math.random().toString(36).substring(2)}`,
-
   fr: `Génère une description professionnelle de portfolio pour un ingénieur logiciel expert en :
 - Programmation C/C++
 - Intelligence Artificielle
@@ -20,7 +18,6 @@ const promptTemplates: Record<Language, string> = {
 - Projets de l'école 42
 - Docker et la containerisation
   #session:${Math.random().toString(36).substring(2)}`,
-
   de: `Erstelle eine professionelle Portfolio-Beschreibung für einen Softwareentwickler mit Fachkenntnissen in:
 - C/C++ Programmierung
 - Künstliche Intelligenz
@@ -32,16 +29,22 @@ const promptTemplates: Record<Language, string> = {
 
 const AboutSection: React.FC = () => {
   const { currentLanguage, t } = useLanguage();
-
   const welcomeText = useTerminalAnimation(t('about.welcome'));
   const [description, setDescription] = useState(t('about.intro1'));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isGenerated, setIsGenerated] = useState(false);
+
+  // Update description when language changes (only if not AI-generated)
+  useEffect(() => {
+    if (!isGenerated) {
+      setDescription(t('about.intro1'));
+    }
+  }, [currentLanguage, t, isGenerated]);
 
   const generateDescription = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     const promptBase = promptTemplates[currentLanguage] || promptTemplates.en;
     const prompt = promptBase + Math.random().toString(36).substring(2);
 
@@ -61,8 +64,9 @@ const AboutSection: React.FC = () => {
       // Clean leading word if needed
       const cleaned = data.description.replace(/^\S+\s+/, '');
       setDescription(cleaned);
+      setIsGenerated(true); // Mark as AI-generated
     } catch (err) {
-      setError(t('Failed to generate description. Please try again later.'));
+      setError(t('about.generation.error'));
       console.error('Generation error:', err);
     } finally {
       setLoading(false);
@@ -81,6 +85,7 @@ const AboutSection: React.FC = () => {
       <p>{description}</p>
       <p>{t('about.intro2')}</p>
       <p>{t('about.intro3')}</p>
+
       <button
         className="button"
         onClick={generateDescription}
@@ -102,16 +107,18 @@ const AboutSection: React.FC = () => {
         {loading ? (
           <>
             <span className="spinner"></span>
-            <span>{t('Generating with Mixtral AI...')}</span>
+            <span>{t('about.generating')}</span>
           </>
         ) : (
           <>
             <span>✨</span>
-            <span>{t('Regenerate with Mixtral-8x7B')}</span>
+            <span>{t('about.regenerate')}</span>
           </>
         )}
       </button>
+
       {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+
       <a href="#contact" className="button" onClick={scrollToContact}>
         {t('about.contact')}
       </a>

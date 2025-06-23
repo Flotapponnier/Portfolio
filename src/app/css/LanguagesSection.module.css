@@ -1,0 +1,103 @@
+/* ========================================
+   LANGUAGES SECTION COMPONENT STYLES
+   ======================================== */
+
+/* Language Cards Grid */
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Language Card 3D Flip Effect */
+.language-card {
+  height: 160px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.language-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.language-card.flipped .language-card-inner {
+  transform: rotateY(180deg);
+}
+
+.language-front,
+.language-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border: var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.language-back {
+  transform: rotateY(180deg);
+}
+
+/* Language Card Content */
+.flag {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+/* Proficiency Indicators */
+.proficiency {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.level {
+  display: block;
+  margin-bottom: 0.3rem;
+  text-align: center;
+}
+
+.level-bar {
+  height: 20px;
+  width: 100%;
+  border: var(--border);
+  position: relative;
+}
+
+.level-bar span {
+  height: 100%;
+  display: block;
+  background-color: var(--text-color);
+}
+
+/* Proficiency Level Colors */
+.proficiency-native .level {
+  color: var(--text-color);
+}
+
+.proficiency-b1 .level {
+  color: #00ccff;
+}
+
+.proficiency-a2 .level {
+  color: #ffcc00;
+}
+
+.proficiency-a1 .level {
+  color: #ff6600;
+}
+
+.proficiency-c2 .level {
+  color: #9900ff;
+}

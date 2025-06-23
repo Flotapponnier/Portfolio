@@ -1,0 +1,83 @@
+/* ========================================
+   PORTFOLIO LAYOUT & SECTION CONTROLS
+   ======================================== */
+
+/* Section Wrapper */
+.section-wrapper {
+  position: relative;
+  margin-bottom: 3rem;
+  transition: all 0.3s ease;
+}
+
+/* Section Controls */
+.section-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.section-wrapper:hover .section-controls {
+  opacity: 1;
+}
+
+.section-control-btn {
+  background: var(--main-bg);
+  border: var(--border);
+  color: var(--text-color);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.section-control-btn:hover:not(.disabled) {
+  background-color: var(--text-color);
+  color: var(--main-bg);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.section-control-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #555;
+}
+
+.section-control-btn.disabled:hover {
+  background: var(--main-bg);
+  color: var(--text-color);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .section-controls {
+    position: relative;
+    top: 0;
+    right: 0;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1rem;
+    opacity: 1;
+  }
+
+  .section-control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+}

@@ -1,0 +1,10 @@
+/* ========================================
+   BOTTOMBAR COMPONENT STYLES
+   ======================================== */
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1rem;
+  border-top: var(--border);
+}

@@ -30,6 +30,9 @@ const translations = {
     'about.intro1': 'My name is Florent Tapponnier, i\'m from France and have been intensively to gain value and skill during the year 2024 - 2025',
     'about.intro2': 'With the help of the 42 school i become proificient in C/C++ developemment and now i have a growing interest in Generative AI.',
     'about.intro3': 'Currently, I\'m focused on applying these skills to the emerging field of GenAI development, with taking an interest in ML/DL/NLP/LLM/AI Agent',
+    'about.regenerate': 'Regenerate with Mistral',
+    'about.generating': 'Generating with Mistral AI...',
+    'about.generation.error': 'Failed to generate description. Please try again later.',
     'about.contact': 'Get in touch',
 
     // Projects section
@@ -84,6 +87,9 @@ const translations = {
     'about.intro1': 'Je m\'appelle Florent Tapponnier, je viens de France et j\'ai travaillé intensivement pour acquérir de la valeur et des compétences durant l\'année 2024 - 2025',
     'about.intro2': 'Grâce à l\'école 42, je suis devenu compétent en développement C/C++ et j\'ai maintenant un intérêt grandissant pour l\'IA générative.',
     'about.intro3': 'Actuellement, je me concentre sur l\'application de ces compétences au domaine émergent du développement GenAI, avec un intérêt pour ML/DL/NLP/LLM/Agent IA',
+    'about.regenerate': 'Régénérer avec Mistral',
+    'about.generating': 'Génération avec Mistral AI...',
+    'about.generation.error': 'Échec de la génération de description. Veuillez réessayer plus tard.',
     'about.contact': 'Me contacter',
 
     // Projects section
@@ -138,6 +144,9 @@ const translations = {
     'about.intro1': 'Mein Name ist Florent Tapponnier, ich komme aus Frankreich und habe intensiv daran gearbeitet, Wert und Fähigkeiten im Jahr 2024 - 2025 zu erlangen',
     'about.intro2': 'Mit Hilfe der 42 Schule bin ich kompetent in der C/C++ Entwicklung geworden und habe jetzt ein wachsendes Interesse an generativer KI.',
     'about.intro3': 'Derzeit konzentriere ich mich darauf, diese Fähigkeiten auf das aufkommende Gebiet der GenAI-Entwicklung anzuwenden, mit Interesse an ML/DL/NLP/LLM/KI-Agent',
+    'about.regenerate': 'Mit Mistral regenerieren',
+    'about.generating': 'Generierung mit Mistral AI...',
+    'about.generation.error': 'Beschreibung konnte nicht generiert werden. Bitte versuchen Sie es später erneut.',
     'about.contact': 'Kontakt aufnehmen',
 
     // Projects section

@@ -1,0 +1,63 @@
+/* ========================================
+   GLOBAL RESPONSIVE STYLES
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Portfolio Container */
+  .portfolio-container {
+    padding: 1rem;
+  }
+
+  /* Global Typography Adjustments */
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  /* Section Spacing */
+  section {
+    padding: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Button Adjustments */
+  .button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Tag Adjustments */
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra Small Screens */
+  .portfolio-container {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  section {
+    padding: 0.5rem;
+  }
+
+  /* Stack everything vertically on very small screens */
+  .contact-grid,
+  .project-grid,
+  .language-grid {
+    grid-template-columns: 1fr;
+  }
+}

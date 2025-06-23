@@ -1,0 +1,26 @@
+/* ========================================
+   CONTACT SECTION COMPONENT STYLES
+   ======================================== */
+
+/* Contact Grid Layout */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Contact Items */
+.contact-item {
+  border: var(--border);
+  padding: 1rem;
+  text-align: center;
+}
+
+.contact-item a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.contact-item a:hover {
+  color: var(--accent);
+}
