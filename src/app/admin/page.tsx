@@ -11,8 +11,6 @@ interface Project {
   tags: { id: number; name: string }[];
 }
 
-const PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD!;
-
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -27,20 +25,37 @@ export default function AdminPage() {
   const [editId, setEditId] = useState<number | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('admin-auth');
-    if (stored === PASSWORD) {
-      setIsAuthenticated(true);
-    } else {
-      const userInput = prompt('Enter admin password:');
-      if (userInput === PASSWORD) {
-        localStorage.setItem('admin-auth', PASSWORD);
+    const checkAuth = async () => {
+      const stored = localStorage.getItem('admin-auth');
+      if (stored === 'true') {
         setIsAuthenticated(true);
       } else {
-        setIsAuthenticated(false);
-        window.location.href = '/';
+        const password = prompt('Enter admin password:');
+        if (!password) return redirectHome();
+
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+
+        if (res.ok) {
+          localStorage.setItem('admin-auth', 'true');
+          setIsAuthenticated(true);
+        } else {
+          alert('Incorrect password');
+          redirectHome();
+        }
       }
-    }
+    };
+
+    checkAuth();
   }, []);
+
+  const redirectHome = () => {
+    setIsAuthenticated(false);
+    window.location.href = '/';
+  };
 
   useEffect(() => {
     if (isAuthenticated) fetchProjects();
@@ -65,7 +80,6 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        // Refresh page after successful deletion
         window.location.reload();
       } else {
         const error = await res.json();
@@ -105,7 +119,6 @@ export default function AdminPage() {
       });
 
       if (res.ok) {
-        // Reset form and refresh page after successful save/update
         setNewProject({ title: '', description: '', link: '', categories: '', tags: '' });
         setEditId(null);
         window.location.reload();
@@ -183,49 +196,19 @@ export default function AdminPage() {
       <section className="admin-form">
         <h2>{editId ? 'Edit Project' : 'Add New Project'}</h2>
         <div className="form-group">
-          <input
-            type="text"
-            placeholder="Title *"
-            value={newProject.title}
-            onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
-            className="admin-input"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Description *"
-            value={newProject.description}
-            onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-            className="admin-input"
-            required
-          />
-          <input
-            type="url"
-            placeholder="Link *"
-            value={newProject.link}
-            onChange={(e) => setNewProject({ ...newProject, link: e.target.value })}
-            className="admin-input"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Categories (comma separated)"
-            value={newProject.categories}
-            onChange={(e) => setNewProject({ ...newProject, categories: e.target.value })}
-            className="admin-input"
-          />
-          <input
-            type="text"
-            placeholder="Tags (comma separated)"
-            value={newProject.tags}
-            onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })}
-            className="admin-input"
-          />
+          <input type="text" placeholder="Title *" value={newProject.title} onChange={(e) => setNewProject({ ...newProject, title: e.target.value })} className="admin-input" required />
+          <input type="text" placeholder="Description *" value={newProject.description} onChange={(e) => setNewProject({ ...newProject, description: e.target.value })} className="admin-input" required />
+          <input type="url" placeholder="Link *" value={newProject.link} onChange={(e) => setNewProject({ ...newProject, link: e.target.value })} className="admin-input" required />
+          <input type="text" placeholder="Categories (comma separated)" value={newProject.categories} onChange={(e) => setNewProject({ ...newProject, categories: e.target.value })} className="admin-input" />
+          <input type="text" placeholder="Tags (comma separated)" value={newProject.tags} onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })} className="admin-input" />
           <button onClick={saveProject} className="admin-button save">
             {editId ? 'Save Changes' : 'Add Project'}
           </button>
           {editId && (
-            <button onClick={() => { setEditId(null); setNewProject({ title: '', description: '', link: '', categories: '', tags: '' }) }} className="admin-button cancel">
+            <button onClick={() => {
+              setEditId(null);
+              setNewProject({ title: '', description: '', link: '', categories: '', tags: '' });
+            }} className="admin-button cancel">
               Cancel Edit
             </button>
           )}
@@ -234,4 +217,3 @@ export default function AdminPage() {
     </main>
   );
 }
-
