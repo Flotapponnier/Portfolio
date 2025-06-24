@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prisma:generate": "cd app/backend && prisma generate",
     "prisma:migrate": "cd app/backend && prisma migrate deploy",
     "db:seed": "cd app/backend && prisma db seed",
     "dev": "next dev",
-    "build": "next build",
+    "prisma:generate": "prisma generate --schema=src/app/backend/prisma/schema.prisma",
+    "build": "npm run prisma:generate && next build"
     "start": "next start",
     "lint": "next lint"
   },
