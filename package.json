@@ -7,7 +7,7 @@
     "db:seed": "cd app/backend && prisma db seed",
     "dev": "next dev",
     "prisma:generate": "prisma generate --schema=src/app/backend/prisma/schema.prisma",
-    "build": "npm run prisma:generate && next build"
+    "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
