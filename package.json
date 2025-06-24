@@ -5,11 +5,11 @@
   "scripts": {
     "prisma:generate": "cd app/backend && prisma generate",
     "prisma:migrate": "cd app/backend && prisma migrate deploy",
-    "db:seed": "cd app/backend && prisma db seed"
+    "db:seed": "cd app/backend && prisma db seed",
     "dev": "next dev",
     "build": "npm run prisma:generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint"
   },
   "dependencies": {
     "@huggingface/inference": "^4.0.6",
