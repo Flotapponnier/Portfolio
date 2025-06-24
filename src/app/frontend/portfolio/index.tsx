@@ -76,11 +76,9 @@ export default function Portfolio() {
   const SectionWrapper: React.FC<{
     sectionId: string;
     children: React.ReactNode;
-    isFirst: boolean;
-    isLast: boolean;
-  }> = ({ sectionId, children, isFirst, isLast }) => (
+  }> = ({ sectionId, children }) => (
     <div className="section-wrapper">
-      <SectionControls sectionId={sectionId} isFirst={isFirst} isLast={isLast} />
+      <SectionControls sectionId={sectionId} />
       {children}
     </div>
   );
@@ -96,16 +94,12 @@ export default function Portfolio() {
 
   return (
     <div className="portfolio-container">
-      {sectionOrder.map((sectionId, index) => {
+      {sectionOrder.map((sectionId) => {
         const SectionComponent = sectionComponents[sectionId];
-        const isFirst = index === 0;
-        const isLast = index === sectionOrder.length - 1;
         return (
           <SectionWrapper
             key={sectionId}
             sectionId={sectionId}
-            isFirst={isFirst}
-            isLast={isLast}
           >
             <SectionComponent />
           </SectionWrapper>
