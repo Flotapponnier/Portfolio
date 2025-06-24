@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prisma:generate": "prisma generate --schema=app/backend/prisma/schema.prisma",
-    "prisma:migrate": "prisma migrate deploy --schema=app/backend/prisma/schema.prisma",
+    "prisma:generate": "cd app/backend && prisma generate",
+    "prisma:migrate": "cd app/backend && prisma migrate deploy",
+    "db:seed": "cd app/backend && prisma db seed"
     "dev": "next dev",
     "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node --esm src/backend/prisma/seed.ts"
   },
   "dependencies": {
     "@huggingface/inference": "^4.0.6",
