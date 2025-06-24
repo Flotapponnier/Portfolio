@@ -1,12 +1,19 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/app/backend/db";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
+    const url = new URL(request.url);
+    const idParam = url.pathname.split("/").pop(); // get last segment (the id)
+
+    if (!idParam) {
+      return NextResponse.json(
+        { error: "Missing project ID" },
+        { status: 400 },
+      );
+    }
+
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: "Invalid project ID" },
@@ -40,6 +47,7 @@ export async function PUT(
       include: { categories: true, tags: true },
     });
 
+    // Clean orphan cleanup
     await Promise.all([
       prisma.category.deleteMany({ where: { projectId: null } }),
       prisma.tag.deleteMany({ where: { projectId: null } }),
@@ -55,12 +63,19 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
+    const url = new URL(request.url);
+    const idParam = url.pathname.split("/").pop();
+
+    if (!idParam) {
+      return NextResponse.json(
+        { error: "Missing project ID" },
+        { status: 400 },
+      );
+    }
+
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: "Invalid project ID" },
