@@ -1,18 +1,59 @@
 /* ========================================
    ABOUT SECTION COMPONENT STYLES
    ======================================== */
-
 .intro {
   padding: 2rem 1rem;
 }
-
 .intro__heading {
   font-size: 3rem;
   margin-bottom: 1rem;
 }
-
 .intro__subheading {
   color: var(--accent);
   font-size: 1.5rem;
   margin-bottom: 1rem;
+}
+
+/* Token animation cursor */
+.cursor-blink {
+  animation: blink 1s infinite;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Spinner placeholder (you can customize this) */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #4caf50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Spinner inside button */
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
