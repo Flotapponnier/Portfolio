@@ -11,7 +11,7 @@ interface Project {
   tags: { id: number; name: string }[];
 }
 
-const PASSWORD = 'admin123';
+const PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD!;
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);

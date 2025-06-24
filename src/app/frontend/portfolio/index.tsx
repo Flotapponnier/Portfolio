@@ -54,9 +54,7 @@ export default function Portfolio() {
 
   const SectionControls: React.FC<{
     sectionId: string;
-    isFirst: boolean;
-    isLast: boolean;
-  }> = ({ sectionId, isFirst, isLast }) => (
+  }> = ({ sectionId }) => (
     <div className="section-controls">
       <button
         className="section-control-btn"
