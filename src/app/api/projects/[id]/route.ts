@@ -4,10 +4,11 @@ import prisma from "@/app/backend/db";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const projectId = parseInt(params.id);
+    const resolvedParams = await params;
+    const projectId = parseInt(resolvedParams.id);
     const data = await request.json();
 
     // First, delete existing relationships
@@ -105,10 +106,11 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const projectId = parseInt(params.id);
+    const resolvedParams = await params;
+    const projectId = parseInt(resolvedParams.id);
 
     // Delete the project (relationships will be deleted automatically due to CASCADE)
     await prisma.project.delete({
