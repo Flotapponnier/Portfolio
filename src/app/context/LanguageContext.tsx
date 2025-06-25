@@ -32,7 +32,7 @@ const translations = {
     'about.intro3': 'Currently, I\'m focused on applying these skills to the emerging field of GenAI development, with taking an interest in ML/DL/NLP/LLM/AI Agent',
     'about.regenerate': 'Regenerate with LLM',
     'about.generating': 'Generating with AI...',
-    'about.generation.error': 'Failed to generate description. Please try again later.',
+    'about.generation.error': 'Failed to generate description. Not enough credit :(, Please try again later.',
     'about.contact': 'Get in touch',
 
     // Projects section
@@ -89,7 +89,7 @@ const translations = {
     'about.intro3': 'Actuellement, je me concentre sur l\'application de ces compétences au domaine émergent du développement GenAI, avec un intérêt pour ML/DL/NLP/LLM/Agent IA',
     'about.regenerate': 'Régénérer avec LLM',
     'about.generating': 'Génération avec AI...',
-    'about.generation.error': 'Échec de la génération de description. Veuillez réessayer plus tard.',
+    'about.generation.error': 'Échec de la génération de description. Plus de credit :(,  Veuillez réessayer plus tard.',
     'about.contact': 'Me contacter',
 
     // Projects section
@@ -146,7 +146,7 @@ const translations = {
     'about.intro3': 'Derzeit konzentriere ich mich darauf, diese Fähigkeiten auf das aufkommende Gebiet der GenAI-Entwicklung anzuwenden, mit Interesse an ML/DL/NLP/LLM/KI-Agent',
     'about.regenerate': 'Mit LLM regenerieren',
     'about.generating': 'Generierung mit AI...',
-    'about.generation.error': 'Beschreibung konnte nicht generiert werden. Bitte versuchen Sie es später erneut.',
+    'about.generation.error': 'Beschreibung konnte nicht generiert werden. Mehr kredit :(, Bitte versuchen Sie es später erneut.',
     'about.contact': 'Kontakt aufnehmen',
 
     // Projects section
