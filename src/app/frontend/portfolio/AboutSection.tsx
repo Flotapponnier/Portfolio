@@ -10,7 +10,7 @@ const promptTemplates: Record<Language, string> = {
 - System programming
 - 42 School projects
 - Docker and containerization
-just start your text like it was me, start "As a software develloper" and end without giving me advice. just give me the text.`,
+just start your text like it was me, start "As a software developer" and end without giving me advice. just give me the text.`,
   fr: `Génère une description professionnelle de portfolio pour un ingénieur logiciel expert en :
 - Programmation C/C++
 - Intelligence Artificielle
@@ -35,76 +35,114 @@ const AboutSection: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isGenerated, setIsGenerated] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
 
-  // Store full generated text to reveal gradually
-  const [fullText, setFullText] = useState<string>('');
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Reference to abort controller for canceling streams
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (!isGenerated) {
       setDescription(t('about.intro1'));
-      setFullText('');
     }
   }, [currentLanguage, t, isGenerated]);
-
-  // Effect to reveal tokens one by one without using tokenIndex state
-  useEffect(() => {
-    if (!fullText) return;
-
-    const tokens = fullText.split(' ');
-    let currentIndex = 0;
-
-    setDescription(''); // reset visible description
-
-    if (intervalRef.current) clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(() => {
-      currentIndex++;
-      setDescription(tokens.slice(0, currentIndex).join(' '));
-
-      if (currentIndex >= tokens.length) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-      }
-    }, 60); // Adjust speed here
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [fullText]);
 
   const generateDescription = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setIsStreaming(true);
+    setIsGenerated(true); // Immediately hide intro2 and intro3
+    setDescription(''); // Clear existing description
 
     const prompt = promptTemplates[currentLanguage] || promptTemplates.en;
+
+    // Create abort controller for canceling the stream
+    abortControllerRef.current = new AbortController();
 
     try {
       const response = await fetch('/api/generate-description', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
+        signal: abortControllerRef.current.signal,
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate description');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const text = data.description?.trim();
-      if (!text || text.length < 10) {
-        throw new Error('Generated content is too short or empty');
+      if (!response.body) {
+        throw new Error('No response body available');
       }
 
-      setFullText(text);  // Set full text for token reveal
-      setIsGenerated(true);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data.trim()) {
+              try {
+                const parsed = JSON.parse(data);
+
+                if (parsed.error) {
+                  throw new Error(parsed.error);
+                }
+
+                if (parsed.done) {
+                  setIsStreaming(false);
+                  // Keep isGenerated as true to maintain the generated state
+                  break;
+                }
+
+                if (parsed.token) {
+                  accumulatedText += parsed.token;
+                  setDescription(accumulatedText);
+                }
+              } catch (parseError) {
+                console.warn('Failed to parse streaming data:', parseError);
+              }
+            }
+          }
+        }
+      }
+
     } catch (err) {
-      setError(t('about.generation.error'));
-      console.error('Generation error:', err);
+      if (err instanceof Error && err.name === 'AbortError') {
+        console.log('Stream was aborted');
+        // Reset to original state if aborted
+        setIsGenerated(false);
+      } else {
+        setError(t('about.generation.error'));
+        console.error('Generation error:', err);
+        // Reset to original state on error
+        setIsGenerated(false);
+        setDescription(t('about.intro1'));
+      }
     } finally {
       setLoading(false);
+      setIsStreaming(false);
     }
   }, [currentLanguage, t]);
+
+  const stopGeneration = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      setLoading(false);
+      setIsStreaming(false);
+      // Reset to original state when stopped
+      setIsGenerated(false);
+      setDescription(t('about.intro1'));
+    }
+  }, [t]);
 
   const scrollToContact = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -117,6 +155,9 @@ const AboutSection: React.FC = () => {
       <p className="intro__subheading terminal-effect">{welcomeText}</p>
 
       <p>{description}</p>
+      {isStreaming && (
+        <span className="streaming-cursor" style={{ animation: 'blink 1s infinite' }}>|</span>
+      )}
 
       {!isGenerated && (
         <>
@@ -126,23 +167,34 @@ const AboutSection: React.FC = () => {
       )}
 
       <div className="button-group" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-        <button
-          className="button"
-          onClick={generateDescription}
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <span className="spinner"></span>
-              <span>{t('about.generating')}</span>
-            </>
-          ) : (
-            <>
-              <span>✨</span>
-              <span>{t('about.regenerate')}</span>
-            </>
-          )}
-        </button>
+        {!isStreaming ? (
+          <button
+            className="button"
+            onClick={generateDescription}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                <span>{t('about.generating')}</span>
+              </>
+            ) : (
+              <>
+                <span>✨</span>
+                <span>{t('about.regenerate')}</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <button
+            className="button button-stop"
+            onClick={stopGeneration}
+            style={{ backgroundColor: '#ff4444' }}
+          >
+            <span>⏹</span>
+            <span>{t('about.generating')}</span>
+          </button>
+        )}
 
         <a href="#contact" className="button" onClick={scrollToContact}>
           {t('about.contact')}
