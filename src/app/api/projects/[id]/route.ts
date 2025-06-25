@@ -1,59 +1,99 @@
-import { NextResponse, NextRequest } from "next/server";
+// /app/api/projects/[id]/route.ts
+import { NextResponse } from "next/server";
 import prisma from "@/app/backend/db";
 
-export async function PUT(request: NextRequest) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const url = new URL(request.url);
-    const idParam = url.pathname.split("/").pop(); // get last segment (the id)
-
-    if (!idParam) {
-      return NextResponse.json(
-        { error: "Missing project ID" },
-        { status: 400 },
-      );
-    }
-
-    const id = parseInt(idParam);
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid project ID" },
-        { status: 400 },
-      );
-    }
-
+    const projectId = parseInt(params.id);
     const data = await request.json();
 
+    // First, delete existing relationships
+    await prisma.projectCategory.deleteMany({
+      where: { projectId },
+    });
+
+    await prisma.projectTag.deleteMany({
+      where: { projectId },
+    });
+
+    // Create or find categories
+    const categories = await Promise.all(
+      data.categories.map(async (name: string) => {
+        return prisma.category.upsert({
+          where: { name },
+          update: {},
+          create: { name },
+        });
+      }),
+    );
+
+    // Create or find tags
+    const tags = await Promise.all(
+      data.tags.map(async (name: string) => {
+        return prisma.tag.upsert({
+          where: { name },
+          update: {},
+          create: { name },
+        });
+      }),
+    );
+
+    // Update the project with new relationships
     const updatedProject = await prisma.project.update({
-      where: { id },
+      where: { id: projectId },
       data: {
         title: data.title,
         description: data.description,
         link: data.link,
         categories: {
-          connectOrCreate: data.categories.map((name: string) => ({
-            where: { name },
-            create: { name },
+          create: categories.map((category) => ({
+            category: {
+              connect: { id: category.id },
+            },
           })),
-          set: [], // Clear existing connections first
         },
         tags: {
-          connectOrCreate: data.tags.map((name: string) => ({
-            where: { name },
-            create: { name },
+          create: tags.map((tag) => ({
+            tag: {
+              connect: { id: tag.id },
+            },
           })),
-          set: [], // Clear existing connections first
         },
       },
-      include: { categories: true, tags: true },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
 
-    // Clean orphan cleanup
-    await Promise.all([
-      prisma.category.deleteMany({ where: { projectId: null } }),
-      prisma.tag.deleteMany({ where: { projectId: null } }),
-    ]);
+    // Transform the response
+    const transformedProject = {
+      id: updatedProject.id,
+      title: updatedProject.title,
+      description: updatedProject.description,
+      link: updatedProject.link,
+      categories: updatedProject.categories.map((pc) => ({
+        id: pc.category.id,
+        name: pc.category.name,
+      })),
+      tags: updatedProject.tags.map((pt) => ({
+        id: pt.tag.id,
+        name: pt.tag.name,
+      })),
+    };
 
-    return NextResponse.json(updatedProject);
+    return NextResponse.json(transformedProject);
   } catch (e) {
     console.error("Error updating project:", e);
     return NextResponse.json(
@@ -63,34 +103,19 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const url = new URL(request.url);
-    const idParam = url.pathname.split("/").pop();
+    const projectId = parseInt(params.id);
 
-    if (!idParam) {
-      return NextResponse.json(
-        { error: "Missing project ID" },
-        { status: 400 },
-      );
-    }
+    // Delete the project (relationships will be deleted automatically due to CASCADE)
+    await prisma.project.delete({
+      where: { id: projectId },
+    });
 
-    const id = parseInt(idParam);
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "Invalid project ID" },
-        { status: 400 },
-      );
-    }
-
-    await prisma.project.delete({ where: { id } });
-
-    await Promise.all([
-      prisma.category.deleteMany({ where: { projectId: null } }),
-      prisma.tag.deleteMany({ where: { projectId: null } }),
-    ]);
-
-    return new NextResponse(null, { status: 204 });
+    return NextResponse.json({ message: "Project deleted successfully" });
   } catch (e) {
     console.error("Error deleting project:", e);
     return NextResponse.json(
@@ -99,4 +124,3 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
-

@@ -39,7 +39,7 @@ const ProjectsSection: React.FC = () => {
     <section id="projects">
       <h2>{t('projects.title')}</h2>
       <div className="filter-controls">
-        {['all', 'c', 'cpp', 'genai', 'dorker'].map((filter) => (
+        {['all', 'c', 'cpp', 'genai', 'docker'].map((filter) => (
           <button
             key={filter}
             className={`button ${activeFilter === filter ? 'active' : ''}`}

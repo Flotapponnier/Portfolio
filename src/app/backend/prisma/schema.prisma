@@ -7,26 +7,41 @@ datasource db {
   url      = env("DIRECT_URL")
 }
 
-
 model Project {
-  id          Int         @id @default(autoincrement())
+  id          Int                 @id @default(autoincrement())
   title       String
   description String
   link        String
-  categories  Category[]
-  tags        Tag[]
+  categories  ProjectCategory[]
+  tags        ProjectTag[]
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique       // <-- add this
-  project   Project?  @relation(fields: [projectId], references: [id])
-  projectId Int?
+  id       Int                 @id @default(autoincrement())
+  name     String              @unique
+  projects ProjectCategory[]
 }
 
 model Tag {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique       // <-- add this
-  project   Project?  @relation(fields: [projectId], references: [id])
-  projectId Int?
+  id       Int          @id @default(autoincrement())
+  name     String       @unique
+  projects ProjectTag[]
+}
+
+model ProjectCategory {
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+
+  @@id([projectId, categoryId])
+}
+
+model ProjectTag {
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     Int
+
+  @@id([projectId, tagId])
 }

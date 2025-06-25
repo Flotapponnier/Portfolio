@@ -14,8 +14,8 @@ async function main() {
     },
     {
       title: "Inception",
-      categories: ["dorker"],
-      tags: ["Dorker", "Virtual Machine", "bash"],
+      categories: ["docker"],
+      tags: ["Docker", "Virtual Machine", "bash"],
       description:
         "Inception project is a docker-compose project that will deploy and connect 3 docker container containing : Nginx / Wordpress / Mariadb, deploying on a reverse proxy a wordpress website connected to a database",
       link: "https://github.com/Flotapponnier/Inception-42",
@@ -28,10 +28,18 @@ async function main() {
         "made with ilindaniel Cub3d is a graphic game made with the MLX42 library that copying the famous first 3d game with Raycasting Wolfenstein made by John Carmack. I mostly focus on the DDA and Brensham's Line algorithm, where my partner focus on texture and parsing",
       link: "https://github.com/Flotapponnier/Cub3d",
     },
+    {
+      title: "Ft_irc",
+      categories: ["c", "cpp"],
+      tags: ["websocket", "irssi"],
+      description:
+        "Ft_irc is an irc server made with the irc client irssi in c++, lead me to increase my knowledge about websocket and be confident with c++, team project made with RaminSanei and MMansurii",
+      link: "https://github.com/MMansurii/ft_irc",
+    },
   ];
 
   for (const proj of projectsData) {
-    // Créer les catégories liées en vérifiant si elles existent (upsert)
+    // Create or find categories
     const categories = await Promise.all(
       proj.categories.map(async (cat) => {
         return prisma.category.upsert({
@@ -42,7 +50,7 @@ async function main() {
       }),
     );
 
-    // Créer les tags liés en vérifiant si elles existent (upsert)
+    // Create or find tags
     const tags = await Promise.all(
       proj.tags.map(async (tag) => {
         return prisma.tag.upsert({
@@ -53,17 +61,25 @@ async function main() {
       }),
     );
 
-    // Créer le projet en lien avec catégories et tags
+    // Create the project with many-to-many relationships
     await prisma.project.create({
       data: {
         title: proj.title,
         description: proj.description,
         link: proj.link,
         categories: {
-          connect: categories.map((c) => ({ id: c.id })),
+          create: categories.map((category) => ({
+            category: {
+              connect: { id: category.id },
+            },
+          })),
         },
         tags: {
-          connect: tags.map((t) => ({ id: t.id })),
+          create: tags.map((tag) => ({
+            tag: {
+              connect: { id: tag.id },
+            },
+          })),
         },
       },
     });

@@ -41,7 +41,7 @@ const translations = {
     'projects.filter.c': 'C',
     'projects.filter.cpp': 'Cpp',
     'projects.filter.genai': 'GenAI',
-    'projects.filter.dorker': 'Docker',
+    'projects.filter.docker': 'Docker',
     'projects.view': 'View Project',
 
     // Skills section
@@ -98,7 +98,7 @@ const translations = {
     'projects.filter.c': 'C',
     'projects.filter.cpp': 'Cpp',
     'projects.filter.genai': 'IA Gen',
-    'projects.filter.dorker': 'Docker',
+    'projects.filter.docker': 'Docker',
     'projects.view': 'Voir le Projet',
 
     // Skills section
@@ -155,7 +155,7 @@ const translations = {
     'projects.filter.c': 'C',
     'projects.filter.cpp': 'Cpp',
     'projects.filter.genai': 'GenAI',
-    'projects.filter.dorker': 'Docker',
+    'projects.filter.docker': 'Docker',
     'projects.view': 'Projekt ansehen',
 
     // Skills section
