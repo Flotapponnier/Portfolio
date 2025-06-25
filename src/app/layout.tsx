@@ -16,8 +16,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Florent Tapponnier - Portfolio",
   description: "Student at 42 - Heilbronn C/C++ Developer | GenAI Enthusiast",
+  icons: {
+    icon: '/icon.png',
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
