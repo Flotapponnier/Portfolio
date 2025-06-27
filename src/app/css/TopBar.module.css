@@ -106,6 +106,8 @@ nav ul {
   display: flex;
   list-style: none;
   flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
 }
 
 nav li {
@@ -127,28 +129,68 @@ nav a:hover {
   color: var(--main-bg);
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .header-top {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: stretch;
+    text-align: left;
+    gap: 1rem;
+  }
+
+  .header-left {
+    order: 1;
+    width: 100%;
   }
 
   .header-right {
+    order: 2;
     width: 100%;
-    justify-content: center;
+    justify-content: flex-end;
+    align-self: flex-start;
   }
 
   .profile-section {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .profile-picture {
+    flex-shrink: 0;
+  }
+
+  .title-section {
+    flex: 1;
+    min-width: 0; /* Allows text to wrap */
+  }
+
+  .title-section h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+  }
+
+  .title-section p {
+    font-size: 0.9rem;
+    line-height: 1.3;
   }
 
   .language-selector {
-    align-items: center;
-    flex-direction: row;
-    gap: 1rem;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .language-select {
+    width: 100%;
+    min-width: 120px;
+    font-size: 0.8rem;
+    padding: 0.4rem;
   }
 
   .profile-img {
@@ -156,11 +198,73 @@ nav a:hover {
     height: 60px;
   }
 
+  /* Navigation Mobile Styles */
+  nav {
+    width: 100%;
+    margin: 1rem 0 0 0;
+  }
+
   nav ul {
     flex-direction: column;
+    gap: 0;
+    width: 100%;
   }
 
   nav li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  nav a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-top {
+    gap: 1rem;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .title-section {
+    text-align: center;
+    width: 100%;
+  }
+
+  .header-right {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .language-selector {
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    width: auto;
+  }
+
+  .language-select {
+    min-width: 140px;
+  }
+
+  .title-section h1 {
+    font-size: 1.3rem;
+  }
+
+  .profile-img {
+    width: 50px;
+    height: 50px;
   }
 }

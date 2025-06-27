@@ -2,6 +2,17 @@
    GLOBAL RESPONSIVE STYLES
    ======================================== */
 
+/* Base responsive improvements */
+@media (max-width: 1024px) {
+  .portfolio-container {
+    padding: 1.5rem;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   /* Portfolio Container */
   .portfolio-container {
@@ -10,20 +21,23 @@
 
   /* Global Typography Adjustments */
   h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    line-height: 1.2;
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    line-height: 1.3;
   }
 
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
   }
 
   /* Section Spacing */
   section {
-    padding: 0.75rem;
+    padding: 1rem;
     margin-bottom: 2rem;
   }
 
@@ -31,33 +45,199 @@
   .button {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Button groups should stack vertically */
+  .button-group {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .button-group .button {
+    width: 100%;
   }
 
   /* Tag Adjustments */
   .tag {
-    font-size: 0.7rem;
-    padding: 0.1rem 0.4rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0.2rem 0.2rem 0.2rem 0;
+  }
+
+  /* Navigation improvements */
+  nav ul {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  nav li {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  nav a {
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+
+  /* Contact grid responsive */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Project grid responsive */
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Language grid responsive */
+  .language-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+  /* Filter controls responsive */
+  .filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-controls .button {
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
+    margin: 0;
+  }
+
+  /* Skills section responsive */
+  .skills {
+    gap: 0.3rem;
+  }
+
+  .skill-item {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Text readability improvements */
+  p {
+    line-height: 1.6;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
   /* Extra Small Screens */
   .portfolio-container {
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
 
   h1 {
     font-size: 1.5rem;
   }
 
-  section {
-    padding: 0.5rem;
+  h2 {
+    font-size: 1.2rem;
   }
 
-  /* Stack everything vertically on very small screens */
-  .contact-grid,
-  .project-grid,
+  section {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Even more compact spacing */
+  .button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Language cards smaller */
   .language-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+
+  .language-card {
+    height: 120px;
+  }
+
+  .flag {
+    font-size: 2.5rem !important;
+  }
+
+  /* Filter controls stack better */
+  .filter-controls .button {
+    min-width: 100%;
+  }
+
+  /* Profile image smaller */
+  .profile-img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  /* Typography improvements for small screens */
+  p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+/* Landscape phones */
+@media (max-width: 768px) and (orientation: landscape) {
+  .portfolio-container {
+    padding: 1rem 2rem;
+  }
+
+  .button-group {
+    flex-direction: row !important;
+  }
+
+  .button-group .button {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* Touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  .button {
+    min-height: 44px; /* Better touch targets */
+  }
+
+  .section-control-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  nav a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Remove hover effects on touch devices */
+  .button:hover {
+    background: none;
+    border: var(--border);
+    color: var(--text-color);
+  }
+
+  /* Better active states for touch */
+  .button:active {
+    background-color: var(--text-color);
+    color: var(--main-bg);
+    transform: scale(0.98);
   }
 }

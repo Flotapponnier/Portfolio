@@ -138,7 +138,6 @@ const AboutSection: React.FC = () => {
       abortControllerRef.current.abort();
       setLoading(false);
       setIsStreaming(false);
-      // Reset to original state when stopped
       setIsGenerated(false);
       setDescription(t('about.intro1'));
     }

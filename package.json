@@ -5,6 +5,7 @@
   "scripts": {
     "prisma:migrate": "cd app/backend && prisma migrate deploy",
     "db:seed": "cd app/backend && prisma db seed",
+    "dev:mobie": "node scripts/mobile-test.js",
     "dev": "next dev",
     "prisma:generate": "prisma generate --schema=src/app/backend/prisma/schema.prisma",
     "build": "npm run prisma:generate && next build",
