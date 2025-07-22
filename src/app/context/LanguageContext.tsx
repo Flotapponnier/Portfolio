@@ -52,6 +52,8 @@ const translations = {
     'skills.c': 'C Programming',
     'skills.cpp': 'C++ Programming',
     'skills.genai': 'Generative AI',
+    'skills.python': 'Python Programming',
+    'skills.go': 'Go Programming',
 
     // Formation section
     'formation.title': 'Formation',
@@ -111,6 +113,8 @@ const translations = {
     'skills.c': 'Programmation C',
     'skills.cpp': 'Programmation C++',
     'skills.genai': 'IA Générative',
+    'skills.python': 'Programmation Python',
+    'skills.go': 'Programmation Go',
 
     // Formation section
     'formation.title': 'Formation',
@@ -170,6 +174,8 @@ const translations = {
     'skills.c': 'C Programmierung',
     'skills.cpp': 'C++ Programmierung',
     'skills.genai': 'Generative KI',
+    'skills.python': 'Python Programmierung',
+    'skills.go': 'Go Programmierung',
 
     // Formation section
     'formation.title': 'Ausbildung',

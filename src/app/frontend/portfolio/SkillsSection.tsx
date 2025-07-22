@@ -23,6 +23,8 @@ const SkillsSection: React.FC = () => {
     { title: t('skills.c'), percentage: 95 },
     { title: t('skills.cpp'), percentage: 90 },
     { title: t('skills.genai'), percentage: 70 },
+    { title: t('skills.python'), percentage: 50 },
+    { title: t('skills.go'), percentage: 50 },
   ];
   const additionalSkills = [
     'Git',
