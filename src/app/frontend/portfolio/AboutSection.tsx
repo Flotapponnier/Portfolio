@@ -4,26 +4,26 @@ import { useLanguage, Language } from '../../context/LanguageContext';
 import { useTerminalAnimation } from './hooks';
 
 const promptTemplates: Record<Language, string> = {
-  en: `Generate a professional portfolio description for a software engineer with expertise in:
-- C/C++ programming
-- Artificial Intelligence
-- System programming
-- 42 School projects
-- Docker and containerization
+  en: `Generate a professional portfolio description for a French developer based in Heilbronn, Germany with expertise in:
+- Backend development and cloud computing
+- Go programming as primary stack
+- C/C++ fundamentals from 42 Heilbronn
+- AI concepts including NLP, generative AI, machine learning
+- Hackathons and startup ecosystem
 just start your text like it was me, start "As a software developer" and end without giving me advice. just give me the text.`,
-  fr: `Génère une description professionnelle de portfolio pour un ingénieur logiciel expert en :
-- Programmation C/C++
-- Intelligence Artificielle
-- Programmation système
-- Projets de l'école 42
-- Docker et la containerisation
-commence simplement la sentence par En temps que devellopeur logiciel, et finit sans me donner de conseil. donne moi juste le texte`,
-  de: `Erstelle eine professionelle Portfolio-Beschreibung für einen Softwareentwickler mit Fachkenntnissen in:
-- C/C++ Programmierung
-- Künstliche Intelligenz
-- Systemprogrammierung
-- 42 Schulprojekte
-- Docker und Containerisierung
+  fr: `Génère une description professionnelle de portfolio pour un développeur français basé à Heilbronn, Allemagne expert en :
+- Développement backend et cloud computing
+- Programmation Go comme stack principal
+- Fondamentaux C/C++ de 42 Heilbronn
+- Concepts d'IA incluant NLP, IA générative, apprentissage automatique
+- Hackathons et écosystème startup
+commence simplement la sentence par En tant que développeur logiciel, et finit sans me donner de conseil. donne moi juste le texte`,
+  de: `Erstelle eine professionelle Portfolio-Beschreibung für einen französischen Entwickler mit Sitz in Heilbronn, Deutschland mit Fachkenntnissen in:
+- Backend Entwicklung und Cloud Computing
+- Go Programmierung als primärer Stack
+- C/C++ Grundlagen von 42 Heilbronn
+- KI Konzepte einschließlich NLP, generative KI, maschinelles Lernen
+- Hackathons und Startup Ökosystem
 Beginnt mit: Als Softwareentwickler bringe ich umfassende Kenntnisse in der Softwareentwicklung mit.
 `
 };
